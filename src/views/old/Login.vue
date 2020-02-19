@@ -3,8 +3,15 @@
     <div class="inside body-part">
       <h1>Connexion</h1>
       <form class="form" @submit.prevent="login" action="">
-        <label for="name">Nom</label>
-        <input required id="name" type="text" class="default" v-model="name">
+        <label for="email">Email</label>
+        <input required id="email" type="text" class="default" v-model="input.email">
+        <label for="password">Mot de passe</label>
+        <input required id="password" type="password" class="default" v-model="input.password">
+        <div v-if="errors.length" class="errors">
+          <span
+            :key="index"
+            v-for="(er, index) in errors">{{ er }}</span>
+        </div>
         <input type="submit" value="Se connecter" class="submit">
       </form>
     </div>
@@ -13,30 +20,43 @@
 
 <script>
 
-import io from 'socket.io-client';
+import axios from 'axios';
 
 export default {
   name: 'Login',
   methods: {
     login() {
-      // control de la data passée
-      this.socket.emit('ADD_USER', {
-        name: this.name,
-      });
+      const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        data: {
+          strategy: 'local',
+          email: this.input.email,
+          password: this.input.password,
+        },
+        url: 'http://localhost:3030/authentication',
+      };
+
+      this.errors = [];
+
+      axios(options)
+        .then((response) => {
+          localStorage.setItem('user-token', response.data.accessToken);
+        })
+        .catch(() => {
+          localStorage.removeItem('user-token');
+          this.errors.push('Erreur d\'authentification, veuillez vérifier.');
+        });
     },
   },
   data() {
     return {
-      name: '',
-      socket: io('localhost:3001'),
+      input: {
+        email: '',
+        password: '',
+      },
+      errors: [],
     };
-  },
-  mounted() {
-    this.socket.on('USER_CREATED', (data) => {
-      sessionStorage.setItem('userName', this.name);
-      sessionStorage.setItem('userId', data);
-      this.$router.push('/');
-    });
   },
 };
 

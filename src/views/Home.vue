@@ -5,62 +5,61 @@
            src="../assets/avatar-male.jpg"
            width="54"
            height="54"
-           title="Sam Jr"
-           alt="Sam Jr"/>
-      <span class="name">Sam Jr</span>
+           :title=this.userName
+           :alt=this.userName
+      />
+      <span class="name">{{ this.userName }}</span>
     </div>
     <div class="inside body-part">
       <Bubble
-        v-for="(message, index) in this.messages"
+        v-for="(message, index) in this.listMessages"
         :key="index"
         :message="message"
       />
     </div>
     <div class="inside footer-part">
-      <form class="txt" action="">
-        <input type="text" placeholder="Ecrire un message...">
+      <form class="txt" action="" @submit.prevent="send">
+        <input type="text" placeholder="Ecrire un message..." v-model="messageToSend">
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import io from 'socket.io-client';
 import Bubble from '../components/Bubble.vue';
-
 /*
 const messages = [
   {
-    me: true,
+    user_id: 1,
     content: 'Il y a quelqu\'un ?',
   },
   {
-    me: false,
+    user_id: 2,
     content: 'Oui oui ! Bienvenue sur ce chat !',
   },
   {
-    me: true,
+    user_id: 1,
     content: 'Merci !!',
   },
   {
-    me: false,
+    user_id: 2,
     content: 'Présente toi en quelques mots ?',
   },
   {
-    me: true,
+    user_id: 1,
     content: 'Je m\'appelle Sam, je suis de Toulouse et je suis développeur.',
   },
   {
-    me: true,
+    user_id: 1,
     content: 'Je fais de la photo et de la vidéo depuis plusieurs années.',
   },
   {
-    me: false,
+    user_id: 1,
     content: 'Super ! Soit le bienvenue Sam !',
   },
 ];
 */
-const messages = [];
 
 export default {
   name: 'Home',
@@ -69,14 +68,37 @@ export default {
   },
   data() {
     return {
-      messages,
+      userName: sessionStorage.getItem('userName'),
+      userId: sessionStorage.getItem('userId'),
+      messageToSend: '',
+      listMessages: [],
+      socket: io('localhost:3001'),
     };
   },
-  mounted() {
-    axios.get('http://localhost:3030/message')
-      .then((response) => {
-        this.messages = response.data.data;
+  methods: {
+    send() {
+      this.socket.emit('SEND_MESSAGE', {
+        userId: this.userId,
+        userName: this.userName,
+        content: this.messageToSend,
       });
+      this.messageToSend = '';
+    },
+  },
+  mounted() {
+    this.socket.on('GET_MESSAGE', (data) => {
+      console.log(data);
+      this.listMessages = [
+        ...this.listMessages,
+        data,
+      ];
+    });
+    this.socket.on('NEW_USER', (data) => {
+      console.log(data);
+    });
+    this.socket.on('USER_CREATED', (data) => {
+      console.log(data);
+    });
   },
 };
 

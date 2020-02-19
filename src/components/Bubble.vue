@@ -1,5 +1,5 @@
 <template>
-  <div class="bubble" :class="{ me: message.user_id === 1 }">
+  <div class="bubble" :class="{ me: message.userId === this.userId }">
     <img class="avatar"
          src="../assets/avatar-male.jpg"
          width="35"
@@ -14,6 +14,11 @@
 export default {
   name: 'Bubble',
   props: ['message'],
+  data() {
+    return {
+      userId: sessionStorage.getItem('userId'),
+    };
+  },
 };
 </script>
 

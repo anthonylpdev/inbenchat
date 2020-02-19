@@ -16,7 +16,7 @@ const routes = [
     name: 'Home',
     component: Home,
     beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('user-token') !== null) {
+      if (sessionStorage.getItem('userName') !== null && sessionStorage.getItem('userId') !== null) {
         next();
       } else {
         next({
