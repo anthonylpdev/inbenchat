@@ -1,5 +1,7 @@
 # inbenchat
 
+![](screenshot.png)
+
 ## Project setup
 ```
 yarn install

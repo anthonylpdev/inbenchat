@@ -19,7 +19,6 @@ export default {
   name: 'Login',
   methods: {
     login() {
-      // control de la data passée
       this.socket.emit('ADD_USER', {
         name: this.name,
       });

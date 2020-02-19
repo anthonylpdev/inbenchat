@@ -28,38 +28,6 @@
 <script>
 import io from 'socket.io-client';
 import Bubble from '../components/Bubble.vue';
-/*
-const messages = [
-  {
-    user_id: 1,
-    content: 'Il y a quelqu\'un ?',
-  },
-  {
-    user_id: 2,
-    content: 'Oui oui ! Bienvenue sur ce chat !',
-  },
-  {
-    user_id: 1,
-    content: 'Merci !!',
-  },
-  {
-    user_id: 2,
-    content: 'Présente toi en quelques mots ?',
-  },
-  {
-    user_id: 1,
-    content: 'Je m\'appelle Sam, je suis de Toulouse et je suis développeur.',
-  },
-  {
-    user_id: 1,
-    content: 'Je fais de la photo et de la vidéo depuis plusieurs années.',
-  },
-  {
-    user_id: 1,
-    content: 'Super ! Soit le bienvenue Sam !',
-  },
-];
-*/
 
 export default {
   name: 'Home',
