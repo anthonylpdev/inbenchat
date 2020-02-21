@@ -44,6 +44,7 @@ export default {
     };
   },
   methods: {
+    // Emit event to socket server when user submit a new message
     send() {
       this.socket.emit('SEND_MESSAGE', {
         userId: this.userId,
@@ -54,18 +55,12 @@ export default {
     },
   },
   mounted() {
+    // Listen every new message and update listMessages to update view
     this.socket.on('GET_MESSAGE', (data) => {
-      console.log(data);
       this.listMessages = [
         ...this.listMessages,
         data,
       ];
-    });
-    this.socket.on('NEW_USER', (data) => {
-      console.log(data);
-    });
-    this.socket.on('USER_CREATED', (data) => {
-      console.log(data);
     });
   },
 };

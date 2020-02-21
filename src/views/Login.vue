@@ -18,6 +18,7 @@ import io from 'socket.io-client';
 export default {
   name: 'Login',
   methods: {
+    // Emit event to socket server when user submit form
     login() {
       this.socket.emit('ADD_USER', {
         name: this.name,
@@ -31,6 +32,7 @@ export default {
     };
   },
   mounted() {
+    // Keep userName and userId in Session Storage
     this.socket.on('USER_CREATED', (data) => {
       sessionStorage.setItem('userName', this.name);
       sessionStorage.setItem('userId', data);

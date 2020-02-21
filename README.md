@@ -2,7 +2,13 @@
 
 ![](screenshot.png)
 
+## Before start
+
+This is frontend part, find my backend in the following repository :
+https://github.com/anthony-lopez-dev/inbenchat-socket
+
 ## Project setup
+
 ```
 yarn install
 ```
